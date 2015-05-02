@@ -1,10 +1,4 @@
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -13,9 +7,10 @@ import java.util.ListIterator;
  */
 public class Operation {
 
-    public float average(String rate, Date beginDate, Date endDate, Boolean bought, Parser ps ){
+    public static float average(String rate, Date beginDate, Date endDate, Boolean bought ){
         float sum = 0;
         float avg = 0;
+        Parser ps = new Parser();
         List<String> XMLs = ps.getXMLs(beginDate, endDate);
         ListIterator<String> XMLiterator = XMLs.listIterator();
 
@@ -27,10 +22,11 @@ public class Operation {
         return avg;
     }
 
-    public double standardDeviation(String rate, Date beginDate, Date endDate, Parser ps) {
+    public static double standardDeviation(String rate, Date beginDate, Date endDate) {
         double stDev =0;
         double x = 0;
-        float avg = average(rate, beginDate, endDate, false, ps);
+        Parser ps = new Parser();
+        float avg = average(rate, beginDate, endDate, false);
         List<String> XMLs = ps.getXMLs(beginDate, endDate);
         ListIterator<String> XMLiterator = XMLs.listIterator();
 

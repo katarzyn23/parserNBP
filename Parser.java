@@ -25,7 +25,7 @@ import java.util.List;
 public class Parser {
 
     //getting rate from xml
-    public float getRateFromXML(String address, String foreignCurrency, Boolean bought) {
+    public static float getRateFromXML(String address, String foreignCurrency, Boolean bought) {
         float result = 0;
         try {
             String rate = null;
@@ -57,7 +57,7 @@ public class Parser {
         return result;
     }
 
-    private String parseString(String s) {
+    private static String parseString(String s) {
         String parsed = null;
         if (s.length() == 11) {
             parsed = s.substring(5);
@@ -67,7 +67,7 @@ public class Parser {
     }
 
     //getting list of xml files
-    public List<String> getXMLs(Date beginDate, Date endDate) {
+    public static List<String> getXMLs(Date beginDate, Date endDate) {
         List<String> currentXMLs = new LinkedList<String>();
         URL url = null;
         try {
@@ -94,7 +94,7 @@ public class Parser {
     }
 
 
-    public Date string2Date(String s)  {
+    public static Date string2Date(String s)  {
         SimpleDateFormat sdf = new SimpleDateFormat("yy-M-dd");
         Date date = null;
         try {

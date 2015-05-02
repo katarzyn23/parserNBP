@@ -10,11 +10,13 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import java.io.*;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -23,7 +25,7 @@ import java.util.LinkedList;
 public class Parser {
 
     //getting rate from xml
-    protected float getRateFromXML(String address, String foreignCurrency, Boolean bought) throws ParserConfigurationException, IOException, SAXException {
+    public float getRateFromXML(String address, String foreignCurrency, Boolean bought){
         String rate = null;
         float b = 0;
         String lastTagName = null;
@@ -33,8 +35,20 @@ public class Parser {
             lastTagName = "kurs_sprzedazy";
         }
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(address);
+        DocumentBuilder db = null;
+        try {
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        Document doc = null;
+        try {
+            doc = db.parse(address);
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         doc.getDocumentElement().normalize();
         NodeList nodeLst = doc.getElementsByTagName("pozycja");
         for (int s = 0; s < nodeLst.getLength(); s++) {
@@ -61,23 +75,43 @@ public class Parser {
     }
 
     //getting list of xml files
-    protected LinkedList<String> getXMLs(Date beginDate, Date endDate) throws IOException, ParseException {
-        LinkedList<String> currentXMLs = new LinkedList<String>();
-        URL url = new URL("http://www.nbp.pl/kursy/xml/dir.txt");
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(url.openStream()));
+    public List<String> getXMLs(Date beginDate, Date endDate){
+        List<String> currentXMLs = new LinkedList<String>();
+        URL url = null;
+        try {
+            url = new URL("http://www.nbp.pl/kursy/xml/dir.txt");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        BufferedReader in = null;
+        try {
+            in = new BufferedReader(
+                    new InputStreamReader(url.openStream()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         String inputLine;
         String tmp;
-        while ((inputLine = in.readLine()) != null) {
-            if (inputLine.startsWith("c")) {
-                tmp = parseString(inputLine);
-                if(string2Date(tmp).after(beginDate) && string2Date(tmp).before(endDate) || string2Date(tmp).compareTo(beginDate)==00 || string2Date(tmp).compareTo(endDate)==0 ){
-                    currentXMLs.add(inputLine);
+        try {
+            while ((inputLine = in.readLine()) != null) {
+                if (inputLine.startsWith("c")) {
+                    tmp = parseString(inputLine);
+                    if(string2Date(tmp).after(beginDate) && string2Date(tmp).before(endDate) || string2Date(tmp).compareTo(beginDate)==00 || string2Date(tmp).compareTo(endDate)==0 ){
+                        currentXMLs.add(inputLine);
+                    }
                 }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
         //System.out.println(currentXMLs);
-        in.close();
+        try {
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return currentXMLs;
     }
 

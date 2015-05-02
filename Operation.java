@@ -13,17 +13,13 @@ import java.util.ListIterator;
  */
 public class Operation {
 
-
-
     public float average(String rate, Date beginDate, Date endDate, Boolean bought, Parser ps ) throws IOException, ParseException, ParserConfigurationException, SAXException {
         float sum = 0;
         float avg = 0;
-        //Parser ps = new Parser();
         List<String> XMLs = ps.getXMLs(beginDate, endDate);
         ListIterator<String> XMLiterator = XMLs.listIterator();
         while (XMLiterator.hasNext()) {
             sum += ps.getRateFromXML("http://www.nbp.pl/kursy/xml/" + XMLiterator.next() + ".xml", rate, bought);
-            //System.out.println(sum);
         }
         avg = sum / XMLs.size();
         return avg;
@@ -33,7 +29,6 @@ public class Operation {
         double stDev =0;
         double x = 0;
         float avg = average(rate, beginDate, endDate, false, ps);
-      //  Parser ps = new Parser();
         List<String> XMLs = ps.getXMLs(beginDate, endDate);
         ListIterator<String> XMLiterator = XMLs.listIterator();
         while (XMLiterator.hasNext()) {

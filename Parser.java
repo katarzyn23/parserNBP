@@ -36,10 +36,8 @@ public class Parser {
                 lastTagName = "kurs_sprzedazy";
             }
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = null;
-            db = dbf.newDocumentBuilder();
-            Document doc = null;
-            doc = db.parse(address);
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = db.parse(address);
             doc.getDocumentElement().normalize();
             NodeList nodeLst = doc.getElementsByTagName("pozycja");
             for (int s = 0; s < nodeLst.getLength(); s++) {
@@ -71,11 +69,14 @@ public class Parser {
     //getting list of xml files
     public List<String> getXMLs(Date beginDate, Date endDate) {
         List<String> currentXMLs = new LinkedList<String>();
+        URL url = null;
         try {
-            URL url = null;
             url = new URL("http://www.nbp.pl/kursy/xml/dir.txt");
-            BufferedReader in = null;
-            in = new BufferedReader(new InputStreamReader(url.openStream()));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()))){
             String inputLine;
             String tmp;
             while ((inputLine = in.readLine()) != null) {
@@ -86,16 +87,21 @@ public class Parser {
                     }
                 }
             }
-        } catch (IOException | ParseException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return currentXMLs;
     }
 
-    
-    public Date string2Date(String s) throws ParseException {
+
+    public Date string2Date(String s)  {
         SimpleDateFormat sdf = new SimpleDateFormat("yy-M-dd");
-        Date date = sdf.parse(s);
+        Date date = null;
+        try {
+            date = sdf.parse(s);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return date;
     }
 

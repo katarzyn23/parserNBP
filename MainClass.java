@@ -24,6 +24,7 @@ public class MainClass {
         boolean d1 = true;
         boolean d2 = true;
         if(args[0].length() == 3 && d1 && d2){
+
             Parser ps = new Parser();
             Operation op = new Operation();
             try{
@@ -41,17 +42,9 @@ public class MainClass {
 
             }catch(NumberFormatException e){
                 e.printStackTrace();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            } catch (SAXException e) {
-                e.printStackTrace();
-            } catch (ParserConfigurationException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-        }else
-        {
+
+        }else {
             System.err.println("Invalid arguments");
         }
 

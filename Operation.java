@@ -7,7 +7,7 @@ import java.util.ListIterator;
  */
 public class Operation {
 
-    public static float average(String rate, Date beginDate, Date endDate, String lastTagName ){
+    public static float average(String foreignCurrency, Date beginDate, Date endDate, String lastTagName ){
         float sum = 0;
         float avg = 0;
         Parser ps = new Parser();
@@ -15,23 +15,23 @@ public class Operation {
         ListIterator<String> XMLiterator = XMLs.listIterator();
 
         while (XMLiterator.hasNext()) {
-            sum += ps.getRateFromXML("http://www.nbp.pl/kursy/xml/" + XMLiterator.next() + ".xml", rate, lastTagName);
+            sum += ps.getRateFromXML("http://www.nbp.pl/kursy/xml/" + XMLiterator.next() + ".xml", foreignCurrency, lastTagName);
         }
 
         avg = sum / XMLs.size();
         return avg;
     }
 
-    public static double standardDeviation(String rate, Date beginDate, Date endDate, String lastTagName) {
+    public static double standardDeviation(String foreignCurrency, Date beginDate, Date endDate, String lastTagName) {
         double stDev =0;
         double x = 0;
         Parser ps = new Parser();
-        float avg = average(rate, beginDate, endDate, lastTagName);
+        float avg = average(foreignCurrency, beginDate, endDate, lastTagName);
         List<String> XMLs = ps.getXMLs(beginDate, endDate);
         ListIterator<String> XMLiterator = XMLs.listIterator();
 
         while (XMLiterator.hasNext()) {
-            x = ps.getRateFromXML("http://www.nbp.pl/kursy/xml/" + XMLiterator.next() + ".xml", rate, lastTagName);
+            x = ps.getRateFromXML("http://www.nbp.pl/kursy/xml/" + XMLiterator.next() + ".xml", foreignCurrency, lastTagName);
             x = (x-avg);
             x = x*x;
             stDev +=x;

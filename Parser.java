@@ -25,16 +25,10 @@ import java.util.List;
 public class Parser {
 
     //getting rate from xml
-    public static float getRateFromXML(String address, String foreignCurrency, Boolean bought) {
+    public static float getRateFromXML(String address, String foreignCurrency, String lastTagName) {
         float result = 0;
         try {
             String rate = null;
-            String lastTagName = null;
-            if (bought) {
-                lastTagName = "kurs_kupna";
-            } else {
-                lastTagName = "kurs_sprzedazy";
-            }
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(address);
@@ -57,6 +51,7 @@ public class Parser {
         return result;
     }
 
+    //parsing string into format xxxx-xx-xx
     private static String parseString(String s) {
         String parsed = null;
         if (s.length() == 11) {
@@ -100,7 +95,9 @@ public class Parser {
         try {
             date = sdf.parse(s);
         } catch (ParseException e) {
+            System.err.println("Invalid date, try YYYY-MM-DD");
             e.printStackTrace();
+
         }
         return date;
     }
